@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+        
+    <wb-module deploy-name="K22CNT1_nhom03_prj04">
+                
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+                
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+                
+        <property name="java-output-path" value="/K22CNT1_nhom03_prj04/build/classes"/>
+        <property name="context-root" value="K22CNT1_nhom03_prj04"/>
+            
+    </wb-module>
+    
+</project-modules>
