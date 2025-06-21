@@ -1,117 +1,155 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<div class="container mt-4">
-  <h2 class="mb-4">Quản lý sản phẩm</h2>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page import="java.util.List" %>
+<%@ page import="model.SanPham, model.DanhMuc" %>
 
-  <div class="d-flex justify-content-end mb-3">
-    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal">
-      <i class="bi bi-plus-circle"></i> Thêm sản phẩm
-    </button>
-  </div>
+<%
+    if (request.getAttribute("danhSachSanPham") == null || request.getAttribute("danhSachDanhMuc") == null) {
+        RequestDispatcher rd = request.getRequestDispatcher("/SanPhamServlet?action=list");
+        rd.forward(request, response);
+        return;
+    }
 
-  <table class="table table-bordered table-hover align-middle text-center">
-    <thead class="table-light">
-      <tr>
-        <th>Mã</th>
-        <th>Tên</th>
-        <th>Danh mục</th>
-        <th>Giá thuê</th>
-        <th>Giá bán</th>
-        <th>Tiền cọc</th>
-        <th>Số lượng</th>
-        <th>Trạng thái</th>
-        <th>Ngày tạo</th>
-        <th>Hành động</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Thay bằng dữ liệu động từ JSTL hoặc Servlet -->
-      <tr>
-        <td>1</td>
-        <td>Bàn làm việc</td>
-        <td>Bàn</td>
-        <td>500.000đ</td>
-        <td>2.000.000đ</td>
-        <td>300.000đ</td>
-        <td>10</td>
-        <td>Có sẵn</td>
-        <td>2025-06-18</td>
-        <td>
-          <button class="btn btn-warning btn-sm me-1" data-bs-toggle="modal" data-bs-target="#productModal">
-            <i class="bi bi-pencil"></i> Sửa
-          </button>
-          <button class="btn btn-danger btn-sm">
-            <i class="bi bi-trash"></i> Xóa
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+    List<SanPham> danhSachSanPham = (List<SanPham>) request.getAttribute("danhSachSanPham");
+    List<DanhMuc> danhSachDanhMuc = (List<DanhMuc>) request.getAttribute("danhSachDanhMuc");
+    SanPham sanPhamChinhSua = (SanPham) request.getAttribute("sanPhamChinhSua");
+%>
 
-  <!-- Modal thêm/sửa sản phẩm -->
-  <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="productModalLabel">Thêm sản phẩm</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản Lý Sản Phẩm</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/bootstrap/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Quản Lý Sản Phẩm</h2>
+
+    <!-- Form Thêm/Sửa -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <%= sanPhamChinhSua != null ? "Cập nhật sản phẩm" : "Thêm sản phẩm mới" %>
         </div>
-        <div class="modal-body">
-          <form action="${pageContext.request.contextPath}/admin/SaveSanPham" method="post">
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Tên sản phẩm</label>
-                <input type="text" class="form-control" name="ten" required>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Danh mục</label>
-                <select class="form-select" name="ma_danh_muc" required>
-                  <!-- Replace bằng dữ liệu danh mục từ servlet -->
-                  <option value="1">Bàn</option>
-                </select>
-              </div>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Mô tả</label>
-              <textarea class="form-control" name="mo_ta" rows="3"></textarea>
-            </div>
-            <div class="row">
-              <div class="col-md-4 mb-3">
-                <label class="form-label">Giá thuê</label>
-                <input type="number" step="0.01" class="form-control" name="gia_thue" required>
-              </div>
-              <div class="col-md-4 mb-3">
-                <label class="form-label">Giá bán</label>
-                <input type="number" step="0.01" class="form-control" name="gia_ban">
-              </div>
-              <div class="col-md-4 mb-3">
-                <label class="form-label">Tiền cọc</label>
-                <input type="number" step="0.01" class="form-control" name="tien_coc">
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Số lượng tồn</label>
-                <input type="number" class="form-control" name="so_luong_ton" required>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Trạng thái</label>
-                <select class="form-select" name="trang_thai">
-                  <option value="co_san">Có sẵn</option>
-                  <option value="da_thue">Đã thuê</option>
-                  <option value="het_hang">Hết hàng</option>
-                </select>
-              </div>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">URL ảnh</label>
-              <input type="text" class="form-control" name="url_anh">
-            </div>
-            <button type="submit" class="btn btn-primary w-100">Lưu</button>
-          </form>
+        <div class="card-body">
+            <form method="post" action="${pageContext.request.contextPath}/SanPhamServlet">
+                <input type="hidden" name="action" value="<%= sanPhamChinhSua != null ? "update" : "insert" %>">
+                <% if (sanPhamChinhSua != null) { %>
+                    <input type="hidden" name="maSanPham" value="<%= sanPhamChinhSua.getMaSanPham() %>">
+                <% } %>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label>Tên sản phẩm</label>
+                        <input type="text" name="ten" class="form-control" required value="<%= sanPhamChinhSua != null ? sanPhamChinhSua.getTen() : "" %>">
+                    </div>
+                    <div class="col-md-6">
+                        <label>Danh mục</label>
+                        <select name="maDanhMuc" class="form-select" required>
+                            <% if (danhSachDanhMuc != null && !danhSachDanhMuc.isEmpty()) {
+                                   for (DanhMuc dm : danhSachDanhMuc) { %>
+                                <option value="<%= dm.getMaDanhMuc() %>" <%= sanPhamChinhSua != null && sanPhamChinhSua.getMaDanhMuc() == dm.getMaDanhMuc() ? "selected" : "" %>>
+                                    <%= dm.getTen() %>
+                                </option>
+                            <%   }
+                               } else { %>
+                                <option value="">Không có danh mục</option>
+                            <% } %>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label>Giá thuê</label>
+                        <input type="number" name="giaThue" class="form-control" required step="0.01"
+                               value="<%= sanPhamChinhSua != null ? sanPhamChinhSua.getGiaThue() : "" %>">
+                    </div>
+                    <div class="col-md-6">
+                        <label>Giá bán</label>
+                        <input type="number" name="giaBan" class="form-control" step="0.01"
+                               value="<%= sanPhamChinhSua != null ? sanPhamChinhSua.getGiaBan() : "" %>">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label>Tiền cọc</label>
+                        <input type="number" name="tienCoc" class="form-control" step="0.01"
+                               value="<%= sanPhamChinhSua != null ? sanPhamChinhSua.getTienCoc() : "" %>">
+                    </div>
+                    <div class="col-md-6">
+                        <label>Số lượng tồn</label>
+                        <input type="number" name="soLuongTon" class="form-control" required
+                               value="<%= sanPhamChinhSua != null ? sanPhamChinhSua.getSoLuongTon() : "" %>">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label>Mô tả</label>
+                    <textarea name="moTa" class="form-control"><%= sanPhamChinhSua != null ? sanPhamChinhSua.getMoTa() : "" %></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label>URL ảnh</label>
+                    <input type="text" name="urlAnh" class="form-control" value="<%= sanPhamChinhSua != null ? sanPhamChinhSua.getUrlAnh() : "" %>">
+                </div>
+
+                <div class="text-end">
+                    <button type="submit" class="btn btn-success"><%= sanPhamChinhSua != null ? "Cập nhật" : "Thêm" %></button>
+                    <a href="${pageContext.request.contextPath}/admin/Qlysanpham.jsp" class="btn btn-secondary">Làm mới</a>
+                </div>
+            </form>
         </div>
-      </div>
     </div>
-  </div>
+
+    <!-- Bảng danh sách -->
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>Tên</th>
+            <th>Danh mục</th>
+            <th>Giá thuê</th>
+            <th>Giá bán</th>
+            <th>Số lượng</th>
+            <th>Ảnh</th>
+            <th>Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% if (danhSachSanPham != null && !danhSachSanPham.isEmpty()) {
+               for (SanPham sp : danhSachSanPham) { %>
+            <tr>
+                <td><%= sp.getMaSanPham() %></td>
+                <td><%= sp.getTen() %></td>
+                <td>
+                    <% for (DanhMuc dm : danhSachDanhMuc) {
+                        if (dm.getMaDanhMuc() == sp.getMaDanhMuc()) {
+                            out.print(dm.getTen());
+                            break;
+                        }
+                    } %>
+                </td>
+                <td><%= sp.getGiaThue() %></td>
+                <td><%= sp.getGiaBan() %></td>
+                <td><%= sp.getSoLuongTon() %></td>
+                <td>
+                    <img src="${pageContext.request.contextPath}/<%= sp.getUrlAnh() %>" width="60" height="60" alt="Ảnh sản phẩm"
+                         onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/img/default.png';">
+                </td>
+                <td>
+                    <a href="${pageContext.request.contextPath}/SanPhamServlet?action=edit&id=<%= sp.getMaSanPham() %>" class="btn btn-warning btn-sm">Sửa</a>
+                    <a href="${pageContext.request.contextPath}/SanPhamServlet?action=delete&id=<%= sp.getMaSanPham() %>" class="btn btn-danger btn-sm"
+                       onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</a>
+                </td>
+            </tr>
+        <% } } else { %>
+            <tr><td colspan="8" class="text-center">Không có sản phẩm</td></tr>
+        <% } %>
+        </tbody>
+    </table>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -119,8 +119,7 @@ public class NguoiDungServlet extends HttpServlet {
 
         // Cập nhật lại session nếu đang dùng thông tin user trong phiên
         HttpSession session = request.getSession();
-        session.setAttribute("user", user);
-
+        session.setAttribute("nguoiDung", user);
         request.setAttribute("message", "Cập nhật thông tin thành công!");
         request.getRequestDispatcher("/khachhang/index_khachhang.jsp").forward(request, response);
     }

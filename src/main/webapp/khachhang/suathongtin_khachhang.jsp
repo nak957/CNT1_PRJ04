@@ -18,8 +18,6 @@
 </head>
 <body class="bg-light">
 
-<jsp:include page="../header.jsp" />
-
 <div class="container mt-5 pt-5" style="margin-top: 120px !important;">
     <div class="row">
         <!-- Cột form -->
@@ -75,7 +73,7 @@
 
                         <button type="submit" class="btn btn-primary w-100">Cập nhật</button>
                         <div class="text-center mt-3">
-                            <a href="<%=request.getContextPath()%>/index.jsp" class="btn btn-link">Quay lại trang chủ</a>
+                            <a href="<%=request.getContextPath()%>/khachhang/index_khachhang.jsp" class="btn btn-link">Quay lại trang chủ</a>
                         </div>
                     </form>
 
