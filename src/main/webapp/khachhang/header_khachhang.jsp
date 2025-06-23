@@ -50,15 +50,11 @@
 		        <img src="https://flagcdn.com/w20/vn.png" width="20" height="14" class="me-1 align-middle"> Hà Nội
 		    </button>
 		
-		    <!-- Sửa thông tin -->
-		    <a href="${pageContext.request.contextPath}/khachhang/suathongtin_khachhang.jsp" class="btn btn-outline-info btn-sm me-2">
-		        <i class="fas fa-user-edit me-1"></i> Sửa thông tin
-		    </a>
-		
-		    <!-- Đăng xuất -->
-		    <button class="btn btn-outline-danger btn-sm" onclick="window.location.href='${pageContext.request.contextPath}/logout'">
-		        <i class="fas fa-sign-out-alt me-1"></i> Đăng xuất
-		    </button>
+		    <!-- Thông tin khách hàng -->
+			<a href="${pageContext.request.contextPath}/khachhang/Profile.jsp" class="btn btn-outline-primary btn-sm">
+			    <i class="fas fa-user-circle me-1"></i> Thông tin khách hàng
+			</a>
+
 		</div>
     </div>
 </nav>

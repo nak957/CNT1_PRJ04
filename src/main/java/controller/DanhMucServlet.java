@@ -25,17 +25,28 @@ public class DanhMucServlet extends HttpServlet {
         if ("insert".equals(action)) {
             String ten = request.getParameter("ten");
             String moTa = request.getParameter("moTa");
-            DanhMuc dm = new DanhMuc(ten, moTa);
+            String urlAnh = request.getParameter("urlAnh");
+
+            DanhMuc dm = new DanhMuc();
+            dm.setTen(ten);
+            dm.setMoTa(moTa);
+            dm.setUrlAnh(urlAnh);
+
             danhMucDAO.insert(dm);
             response.sendRedirect("admin/index_admin.jsp");
+
         } else if ("update".equals(action)) {
             int id = Integer.parseInt(request.getParameter("maDanhMuc"));
             String ten = request.getParameter("ten");
             String moTa = request.getParameter("moTa");
+            String urlAnh = request.getParameter("urlAnh");
+
             DanhMuc dm = new DanhMuc();
             dm.setMaDanhMuc(id);
             dm.setTen(ten);
             dm.setMoTa(moTa);
+            dm.setUrlAnh(urlAnh);
+
             danhMucDAO.update(dm);
             response.sendRedirect("admin/index_admin.jsp");
         }

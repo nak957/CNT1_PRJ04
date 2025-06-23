@@ -38,6 +38,8 @@ public class SanPhamServlet extends HttpServlet {
         } else if (action.equals("delete")) {
             int id = Integer.parseInt(request.getParameter("id"));
             sanPhamDAO.delete(id);
+
+            // Sau khi xóa, quay lại Qlysanpham.jsp như cũ
             response.sendRedirect(request.getContextPath() + "/admin/Qlysanpham.jsp");
         }
     }
@@ -48,17 +50,21 @@ public class SanPhamServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
 
-        if (action.equals("insert")) {
+        if ("insert".equals(action)) {
             SanPham sp = extractSanPhamFromRequest(request);
             sanPhamDAO.insert(sp);
-        } else if (action.equals("update")) {
+
+            // ✅ Chuyển hướng về index_admin.jsp sau khi thêm mới
+            response.sendRedirect(request.getContextPath() + "/admin/index_admin.jsp");
+        } else if ("update".equals(action)) {
             int id = Integer.parseInt(request.getParameter("maSanPham"));
             SanPham sp = extractSanPhamFromRequest(request);
             sp.setMaSanPham(id);
             sanPhamDAO.update(sp);
-        }
 
-        response.sendRedirect(request.getContextPath() + "/admin/Qlysanpham.jsp");
+            // ✅ Chuyển hướng về index_admin.jsp sau khi cập nhật
+            response.sendRedirect(request.getContextPath() + "/admin/index_admin.jsp");
+        }
     }
 
     private void listSanPham(HttpServletRequest request, HttpServletResponse response)
@@ -67,6 +73,8 @@ public class SanPhamServlet extends HttpServlet {
         List<DanhMuc> danhSachDanhMuc = danhMucDAO.getAll();
         request.setAttribute("danhSachSanPham", danhSachSanPham);
         request.setAttribute("danhSachDanhMuc", danhSachDanhMuc);
+
+        // Trả dữ liệu về trang quản lý sản phẩm
         request.getRequestDispatcher("admin/Qlysanpham.jsp").forward(request, response);
     }
 

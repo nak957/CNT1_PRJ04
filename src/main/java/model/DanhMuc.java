@@ -6,23 +6,28 @@ public class DanhMuc {
     private int maDanhMuc;
     private String ten;
     private String moTa;
+    private String urlAnh;       
     private Timestamp ngayTao;
 
+    // Constructors
     public DanhMuc() {
     }
 
-    public DanhMuc(String ten, String moTa) {
+    public DanhMuc(String ten, String moTa, String urlAnh) {
         this.ten = ten;
         this.moTa = moTa;
+        this.urlAnh = urlAnh;
     }
 
-    public DanhMuc(int maDanhMuc, String ten, String moTa, Timestamp ngayTao) {
+    public DanhMuc(int maDanhMuc, String ten, String moTa, String urlAnh, Timestamp ngayTao) {
         this.maDanhMuc = maDanhMuc;
         this.ten = ten;
         this.moTa = moTa;
+        this.urlAnh = urlAnh;
         this.ngayTao = ngayTao;
     }
 
+    // Getters & Setters
     public int getMaDanhMuc() {
         return maDanhMuc;
     }
@@ -45,6 +50,14 @@ public class DanhMuc {
 
     public void setMoTa(String moTa) {
         this.moTa = moTa;
+    }
+
+    public String getUrlAnh() {
+        return urlAnh;
+    }
+
+    public void setUrlAnh(String urlAnh) {
+        this.urlAnh = urlAnh;
     }
 
     public Timestamp getNgayTao() {

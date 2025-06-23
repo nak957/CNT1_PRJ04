@@ -19,7 +19,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Quản Lý Sản Phẩm</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/bootstrap/css/bootstrap.min.css">
+    <!-- Sử dụng CDN Bootstrap để đảm bảo không lỗi đường dẫn -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="container mt-5">
@@ -39,20 +40,16 @@
 
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label>Tên sản phẩm</label>
+                        <label class="form-label">Tên sản phẩm</label>
                         <input type="text" name="ten" class="form-control" required value="<%= sanPhamChinhSua != null ? sanPhamChinhSua.getTen() : "" %>">
                     </div>
                     <div class="col-md-6">
-                        <label>Danh mục</label>
+                        <label class="form-label">Danh mục</label>
                         <select name="maDanhMuc" class="form-select" required>
-                            <% if (danhSachDanhMuc != null && !danhSachDanhMuc.isEmpty()) {
-                                   for (DanhMuc dm : danhSachDanhMuc) { %>
+                            <% for (DanhMuc dm : danhSachDanhMuc) { %>
                                 <option value="<%= dm.getMaDanhMuc() %>" <%= sanPhamChinhSua != null && sanPhamChinhSua.getMaDanhMuc() == dm.getMaDanhMuc() ? "selected" : "" %>>
                                     <%= dm.getTen() %>
                                 </option>
-                            <%   }
-                               } else { %>
-                                <option value="">Không có danh mục</option>
                             <% } %>
                         </select>
                     </div>
@@ -60,12 +57,12 @@
 
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label>Giá thuê</label>
+                        <label class="form-label">Giá thuê</label>
                         <input type="number" name="giaThue" class="form-control" required step="0.01"
                                value="<%= sanPhamChinhSua != null ? sanPhamChinhSua.getGiaThue() : "" %>">
                     </div>
                     <div class="col-md-6">
-                        <label>Giá bán</label>
+                        <label class="form-label">Giá bán</label>
                         <input type="number" name="giaBan" class="form-control" step="0.01"
                                value="<%= sanPhamChinhSua != null ? sanPhamChinhSua.getGiaBan() : "" %>">
                     </div>
@@ -73,24 +70,24 @@
 
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label>Tiền cọc</label>
+                        <label class="form-label">Tiền cọc</label>
                         <input type="number" name="tienCoc" class="form-control" step="0.01"
                                value="<%= sanPhamChinhSua != null ? sanPhamChinhSua.getTienCoc() : "" %>">
                     </div>
                     <div class="col-md-6">
-                        <label>Số lượng tồn</label>
+                        <label class="form-label">Số lượng tồn</label>
                         <input type="number" name="soLuongTon" class="form-control" required
                                value="<%= sanPhamChinhSua != null ? sanPhamChinhSua.getSoLuongTon() : "" %>">
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label>Mô tả</label>
+                    <label class="form-label">Mô tả</label>
                     <textarea name="moTa" class="form-control"><%= sanPhamChinhSua != null ? sanPhamChinhSua.getMoTa() : "" %></textarea>
                 </div>
 
                 <div class="mb-3">
-                    <label>URL ảnh</label>
+                    <label class="form-label">URL ảnh</label>
                     <input type="text" name="urlAnh" class="form-control" value="<%= sanPhamChinhSua != null ? sanPhamChinhSua.getUrlAnh() : "" %>">
                 </div>
 
@@ -117,8 +114,7 @@
         </tr>
         </thead>
         <tbody>
-        <% if (danhSachSanPham != null && !danhSachSanPham.isEmpty()) {
-               for (SanPham sp : danhSachSanPham) { %>
+        <% for (SanPham sp : danhSachSanPham) { %>
             <tr>
                 <td><%= sp.getMaSanPham() %></td>
                 <td><%= sp.getTen() %></td>
@@ -143,13 +139,12 @@
                        onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</a>
                 </td>
             </tr>
-        <% } } else { %>
-            <tr><td colspan="8" class="text-center">Không có sản phẩm</td></tr>
         <% } %>
         </tbody>
     </table>
 </div>
 
-<script src="${pageContext.request.contextPath}/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- JS Bootstrap CDN -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

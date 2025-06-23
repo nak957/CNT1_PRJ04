@@ -22,6 +22,7 @@ public class DanhMucDAO {
                     rs.getInt("ma_danh_muc"),
                     rs.getString("ten"),
                     rs.getString("mo_ta"),
+                    rs.getString("url_anh"),
                     rs.getTimestamp("ngay_tao")
                 );
                 list.add(dm);
@@ -34,11 +35,14 @@ public class DanhMucDAO {
     }
 
     public void insert(DanhMuc dm) {
-        String sql = "INSERT INTO DanhMuc (ten, mo_ta) VALUES (?, ?)";
+        String sql = "INSERT INTO DanhMuc (ten, mo_ta, url_anh) VALUES (?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setString(1, dm.getTen());
             ps.setString(2, dm.getMoTa());
+            ps.setString(3, dm.getUrlAnh());
+
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -46,12 +50,15 @@ public class DanhMucDAO {
     }
 
     public void update(DanhMuc dm) {
-        String sql = "UPDATE DanhMuc SET ten = ?, mo_ta = ? WHERE ma_danh_muc = ?";
+        String sql = "UPDATE DanhMuc SET ten = ?, mo_ta = ?, url_anh = ? WHERE ma_danh_muc = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setString(1, dm.getTen());
             ps.setString(2, dm.getMoTa());
-            ps.setInt(3, dm.getMaDanhMuc());
+            ps.setString(3, dm.getUrlAnh());
+            ps.setInt(4, dm.getMaDanhMuc());
+
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
