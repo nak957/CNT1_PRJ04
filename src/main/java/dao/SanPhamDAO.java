@@ -122,4 +122,38 @@ public class SanPhamDAO {
         }
         return null;
     }
+    //hàm để hiển thị sản phẩm theo danh mục
+    public List<SanPham> getByDanhMuc(int maDanhMuc) {
+        List<SanPham> list = new ArrayList<>();
+        String sql = "SELECT * FROM SanPham WHERE ma_danh_muc = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, maDanhMuc);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                SanPham sp = new SanPham();
+                sp.setMaSanPham(rs.getInt("ma_san_pham"));
+                sp.setTen(rs.getString("ten"));
+                sp.setMoTa(rs.getString("mo_ta"));
+                sp.setMaDanhMuc(rs.getInt("ma_danh_muc"));
+                sp.setGiaThue(rs.getBigDecimal("gia_thue"));
+                sp.setGiaBan(rs.getBigDecimal("gia_ban"));
+                sp.setTienCoc(rs.getBigDecimal("tien_coc"));
+                sp.setSoLuongTon(rs.getInt("so_luong_ton"));
+                sp.setUrlAnh(rs.getString("url_anh"));
+                sp.setTrangThai(rs.getString("trang_thai"));
+                list.add(sp);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+	
 }

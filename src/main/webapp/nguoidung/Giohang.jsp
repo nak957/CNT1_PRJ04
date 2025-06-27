@@ -1,146 +1,112 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.*, java.text.DecimalFormat" %>
-<%!
-class CartItem {
-    private String name;
-    private String imageUrl;
-    private double price;
-    private int quantity;
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
-    public CartItem(String name, String imageUrl, double price, int quantity) {
-        this.name = name;
-        this.imageUrl = imageUrl;
-        this.price = price;
-        this.quantity = quantity;
-    }
-
-    public String getName() { return name; }
-    public String getImageUrl() { return imageUrl; }
-    public double getPrice() { return price; }
-    public int getQuantity() { return quantity; }
-}
-%>
-<%
-    List<CartItem> cartItems = new ArrayList<>();
-    cartItems.add(new CartItem("Sofa Đen Sang Trọng", "https://via.placeholder.com/80", 6000000, 1));
-    cartItems.add(new CartItem("Bàn Cafe Gỗ", "https://via.placeholder.com/80", 2500000, 2));
-    DecimalFormat df = new DecimalFormat("#,### VNĐ");
-%>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <title>Giỏ Hàng</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
-<!-- Include Header -->
-    <jsp:include page="../header.jsp" />
 
-    <!-- Breadcrumb -->
-    <div class="bg-light py-2 mt-5">
-        <div class="container-fluid px-5">
-           <div class="bg-light py-2 mt-5">
-    <div class="container-fluid px-5">
+<!-- Header động -->
+<c:choose>
+    <c:when test="${not empty sessionScope.userId}">
+        <jsp:include page="../khachhang/header_khachhang.jsp" />
+    </c:when>
+    <c:otherwise>
+        <jsp:include page="../header.jsp" />
+    </c:otherwise>
+</c:choose>
 
 <div class="container mt-5">
-    <div class="card shadow-sm">
-        <div class="card-header d-flex justify-content-between align-items-center bg-white">
-            <h4 class="mb-0 text-dark">🛒 Giỏ Hàng</h4>
-            <span class="badge badge-secondary">Ưu đãi 40% + Quà tặng 699K</span>
+    <h2 class="text-center mb-4">Giỏ Hàng</h2>
+
+    <!-- Nếu giỏ hàng trống -->
+    <c:if test="${empty gioHangList}">
+        <div class="alert alert-info text-center">
+            Giỏ hàng của bạn đang trống. <a href="${pageContext.request.contextPath}/sanpham">Mua sắm ngay!</a>
+        </div>
+    </c:if>
+
+    <!-- Nếu có sản phẩm -->
+    <c:if test="${not empty gioHangList}">
+        <div class="list-group mb-4">
+            <c:forEach var="item" items="${gioHangList}">
+                <div class="list-group-item d-flex align-items-center">
+                    <!-- Checkbox chọn -->
+                    <input type="checkbox" form="formMua" name="chonSanPham" value="${item.maSanPham}" class="form-check-input me-3"/>
+
+                    <!-- Ảnh -->
+                    <img src="${pageContext.request.contextPath}/${item.sanPham.urlAnh}" alt="Ảnh"
+                         class="img-thumbnail me-3" style="width: 80px; height: 80px;"
+                         onerror="this.onerror=null;this.src='${pageContext.request.contextPath}/assets/img/default.png';" />
+
+                    <div class="flex-grow-1">
+                        <h6 class="mb-1">${item.sanPham.ten}</h6>
+                        <p class="mb-1">
+                            Giá thuê: <fmt:formatNumber value="${item.sanPham.giaThue}" type="currency" currencySymbol="đ"/>
+                        </p>
+
+                        <!-- Form cập nhật số lượng -->
+                        <form action="${pageContext.request.contextPath}/GioHangServlet" method="post" class="d-inline">
+                            <input type="hidden" name="action" value="update">
+                            <input type="hidden" name="maSanPham" value="${item.maSanPham}">
+                            <div class="input-group input-group-sm" style="max-width: 140px;">
+                                <button class="btn btn-outline-secondary" type="submit" name="soLuong" value="${item.soLuong - 1}"
+                                        <c:if test="${item.soLuong <= 1}">disabled</c:if>>-</button>
+                                <input type="text" class="form-control text-center" value="${item.soLuong}" readonly>
+                                <button class="btn btn-outline-secondary" type="submit" name="soLuong" value="${item.soLuong + 1}"
+                                        <c:if test="${item.soLuong >= item.sanPham.soLuongTon}">disabled</c:if>>+</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Nút XÓA -->
+                    <form action="${pageContext.request.contextPath}/GioHangServlet" method="post" class="d-inline">
+                        <input type="hidden" name="action" value="delete" />
+                        <input type="hidden" name="maSanPham" value="${item.maSanPham}" />
+                        <button type="submit" class="btn btn-danger btn-sm ms-3"
+                                onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?')">
+                            Xóa
+                        </button>
+                    </form>
+                </div>
+            </c:forEach>
         </div>
 
-        <% if (cartItems.isEmpty()) { %>
-            <div class="card-body text-center py-5">
-                <img src="https://cdn-icons-png.flaticon.com/512/102/102661.png" class="img-fluid" style="width: 100px;" alt="Empty">
-                <h5 class="mt-3 text-muted">Giỏ hàng trống. Hãy thêm sản phẩm nhé!</h5>
-            </div>
-        <% } else { %>
-            <div class="card-body bg-light">
-                <div class="table-responsive">
-                    <table class="table table-bordered bg-white">
-                        <thead class="thead-light">
-                            <tr>
-                                <th scope="col"><input type="checkbox" id="selectAll" class="form-check-input"></th>
-                                <th scope="col">Sản phẩm</th>
-                                <th scope="col" class="text-center">Đơn giá</th>
-                                <th scope="col" class="text-center">Số lượng</th>
-                                <th scope="col" class="text-center">Tạm tính</th>
-                                <th scope="col" class="text-center">Thao tác</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <% double total = 0; %>
-                        <% for (CartItem item : cartItems) {
-                            double itemTotal = item.getPrice() * item.getQuantity();
-                            total += itemTotal;
-                        %>
-                            <tr>
-                                <td><input type="checkbox" class="form-check-input item-checkbox" data-price="<%= itemTotal %>"></td>
-                                <td>
-                                    <div class="media">
-                                        <img src="<%= item.getImageUrl() %>" class="mr-3 border rounded" width="60" height="60" alt="SP">
-                                        <div class="media-body align-self-center">
-                                            <strong class="text-dark"><%= item.getName() %></strong>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="text-center text-dark"><%= df.format(item.getPrice()) %></td>
-                                <td class="text-center">
-                                    <div class="input-group input-group-sm justify-content-center">
-                                        <div class="input-group-prepend">
-                                            <button class="btn btn-outline-secondary" type="button">-</button>
-                                        </div>
-                                        <input type="text" class="form-control text-center" style="max-width: 50px;" value="<%= item.getQuantity() %>" readonly>
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary" type="button">+</button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="text-center text-primary font-weight-bold"><%= df.format(itemTotal) %></td>
-                                <td class="text-center">
-                                    <button class="btn btn-sm btn-outline-danger">Xóa</button>
-                                </td>
-                            </tr>
-                        <% } %>
-                        </tbody>
-                    </table>
-                </div>
+        <!-- nút xác nhận thuê và mua -->
+        <div class="d-flex justify-content-between align-items-center">
+            <a href="${pageContext.request.contextPath}/sanpham" class="btn btn-outline-secondary">⬅ Tiếp tục mua sắm</a>
 
-                <div class="d-flex justify-content-between align-items-center mt-4">
-                    <h5 class="mb-0">Tổng cộng: <span id="totalAmount" class="text-primary"><%= df.format(total) %></span></h5>
-                    <div>
-                        <a href="thanhtoanmua.jsp" class="btn btn-outline-primary btn-lg mr-2">Mua</a>
-                        <a href="thanhtoanthue.jsp" class="btn btn-outline-success btn-lg">Thuê</a>
-                    </div>
-                </div>
+            <div class="d-flex gap-2">
+                <c:choose>
+                    <c:when test="${not empty sessionScope.userId}">
+                        <!-- Form thuê -->
+                        <form action="${pageContext.request.contextPath}/XuLyThueServlet" method="post" class="d-inline">
+                            <c:forEach var="item" items="${gioHangList}">
+                                <input type="checkbox" name="chonSanPham" value="${item.maSanPham}" checked hidden/>
+                            </c:forEach>
+                            <button type="submit" class="btn btn-primary">Thuê</button>
+                        </form>
+
+                        <!-- Form mua -->
+                        <form id="formMua" action="${pageContext.request.contextPath}/XuLyGioHangServlet" method="post" class="d-inline">
+                            <input type="hidden" name="action" value="mua"/>
+                            <button type="submit" class="btn btn-success">Mua</button>
+                        </form>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="${pageContext.request.contextPath}/login_register/login.jsp" class="btn btn-primary">Đăng nhập để tiếp tục</a>
+                    </c:otherwise>
+                </c:choose>
             </div>
-        <% } %>
-    </div>
+        </div>
+    </c:if>
 </div>
 
-<!-- Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script>
-    document.querySelectorAll('.item-checkbox').forEach(cb => {
-        cb.addEventListener('change', () => {
-            let total = 0;
-            document.querySelectorAll('.item-checkbox:checked').forEach(item => {
-                total += parseFloat(item.dataset.price);
-            });
-            document.getElementById('totalAmount').textContent = new Intl.NumberFormat('vi-VN', {
-                style: 'currency',
-                currency: 'VND'
-            }).format(total);
-        });
-    });
-
-    document.getElementById('selectAll')?.addEventListener('change', function () {
-        let checked = this.checked;
-        document.querySelectorAll('.item-checkbox').forEach(cb => cb.checked = checked);
-        document.querySelectorAll('.item-checkbox')[0].dispatchEvent(new Event('change'));
-    });
-</script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

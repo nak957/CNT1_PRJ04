@@ -22,7 +22,7 @@ public class DangNhapServlet extends HttpServlet {
         if (nguoiDung != null) {
             HttpSession session = request.getSession();
             session.setAttribute("nguoiDung", nguoiDung);
-
+            session.setAttribute("userId", nguoiDung.getMaNguoiDung());
             // Điều hướng theo vai trò
             if ("admin".equalsIgnoreCase(nguoiDung.getVaiTro())) {
                 response.sendRedirect("admin/index_admin.jsp");

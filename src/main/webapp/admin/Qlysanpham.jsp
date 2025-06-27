@@ -19,20 +19,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Quản Lý Sản Phẩm</title>
-    <!-- Sử dụng CDN Bootstrap để đảm bảo không lỗi đường dẫn -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="container mt-5">
     <h2 class="text-center mb-4">Quản Lý Sản Phẩm</h2>
 
-    <!-- Form Thêm/Sửa -->
     <div class="card mb-4">
         <div class="card-header">
             <%= sanPhamChinhSua != null ? "Cập nhật sản phẩm" : "Thêm sản phẩm mới" %>
         </div>
         <div class="card-body">
-            <form method="post" action="${pageContext.request.contextPath}/SanPhamServlet">
+            <form method="post" action="${pageContext.request.contextPath}/SanPhamServlet" enctype="multipart/form-data">
                 <input type="hidden" name="action" value="<%= sanPhamChinhSua != null ? "update" : "insert" %>">
                 <% if (sanPhamChinhSua != null) { %>
                     <input type="hidden" name="maSanPham" value="<%= sanPhamChinhSua.getMaSanPham() %>">
@@ -58,26 +56,22 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="form-label">Giá thuê</label>
-                        <input type="number" name="giaThue" class="form-control" required step="0.01"
-                               value="<%= sanPhamChinhSua != null ? sanPhamChinhSua.getGiaThue() : "" %>">
+                        <input type="number" name="giaThue" class="form-control" required step="0.01" value="<%= sanPhamChinhSua != null ? sanPhamChinhSua.getGiaThue() : "" %>">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Giá bán</label>
-                        <input type="number" name="giaBan" class="form-control" step="0.01"
-                               value="<%= sanPhamChinhSua != null ? sanPhamChinhSua.getGiaBan() : "" %>">
+                        <input type="number" name="giaBan" class="form-control" step="0.01" value="<%= sanPhamChinhSua != null ? sanPhamChinhSua.getGiaBan() : "" %>">
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="form-label">Tiền cọc</label>
-                        <input type="number" name="tienCoc" class="form-control" step="0.01"
-                               value="<%= sanPhamChinhSua != null ? sanPhamChinhSua.getTienCoc() : "" %>">
+                        <input type="number" name="tienCoc" class="form-control" step="0.01" value="<%= sanPhamChinhSua != null ? sanPhamChinhSua.getTienCoc() : "" %>">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Số lượng tồn</label>
-                        <input type="number" name="soLuongTon" class="form-control" required
-                               value="<%= sanPhamChinhSua != null ? sanPhamChinhSua.getSoLuongTon() : "" %>">
+                        <input type="number" name="soLuongTon" class="form-control" required value="<%= sanPhamChinhSua != null ? sanPhamChinhSua.getSoLuongTon() : "" %>">
                     </div>
                 </div>
 
@@ -87,8 +81,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">URL ảnh</label>
-                    <input type="text" name="urlAnh" class="form-control" value="<%= sanPhamChinhSua != null ? sanPhamChinhSua.getUrlAnh() : "" %>">
+                    <label class="form-label">Ảnh sản phẩm</label>
+                    <input type="file" name="fileAnh" class="form-control" <%= sanPhamChinhSua == null ? "required" : "" %>>
                 </div>
 
                 <div class="text-end">
@@ -99,7 +93,6 @@
         </div>
     </div>
 
-    <!-- Bảng danh sách -->
     <table class="table table-bordered table-hover">
         <thead class="table-dark">
         <tr>
@@ -144,7 +137,6 @@
     </table>
 </div>
 
-<!-- JS Bootstrap CDN -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

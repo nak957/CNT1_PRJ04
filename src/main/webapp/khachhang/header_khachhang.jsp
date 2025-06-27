@@ -20,14 +20,14 @@
     <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
         <!-- Menu trung tâm -->
         <ul class="navbar-nav mx-auto">
-            <li class="nav-item <%= request.getRequestURI().contains("index.jsp") ? "active" : "" %>">
+            <li class="nav-item <%= request.getRequestURI().contains("khachhang/index_khachhang.jsp") ? "active" : "" %>">
                 <a class="nav-link" href="${pageContext.request.contextPath}/khachhang/index_khachhang.jsp">Trang chủ</a>
             </li>
-            <li class="nav-item <%= request.getRequestURI().contains("nguoidung/Doanhnghiep.jsp") ? "active" : "" %>">
+            <li class="nav-item <%= request.getRequestURI().contains("khachhang/Doanhnghiep_khachhang.jsp") ? "active" : "" %>">
                 <a class="nav-link" href="${pageContext.request.contextPath}/khachhang/Doanhnghiep_khachhang.jsp">Cho Doanh nghiệp</a>
             </li>
-            <li class="nav-item <%= request.getRequestURI().contains("Sanpham.jsp") ? "active" : "" %>">
-                <a class="nav-link" href="${pageContext.request.contextPath}/khachhang/Sanpham_khachhang.jsp">Sản phẩm</a>
+            <li class="nav-item <%= request.getRequestURI().contains("khachhang/Sanpham_khachhang.jsp") ? "active" : "" %>">
+                <a class="nav-link" href="${pageContext.request.contextPath}/sanpham">Sản phẩm</a>
             </li>
         </ul>
 

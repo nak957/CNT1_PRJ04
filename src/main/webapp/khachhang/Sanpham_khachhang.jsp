@@ -1,5 +1,5 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -19,84 +19,26 @@
     <!-- Breadcrumb -->
     <div class="bg-light py-2 mt-5">
         <div class="container-fluid px-5">
-           <div class="bg-light py-2 mt-5">
-    <div class="container-fluid px-5">
-        <nav aria-label="breadcrumb">
-    <ol class="breadcrumb bg-transparent p-0 m-0">
-  <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
-  <li class="breadcrumb-item"><a href="#">Bộ sưu tập</a></li>
-</ol>
-
-</nav>
-
-    </div>
-</div>
-
-</div>
-
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-transparent p-0 m-0">
+                    <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="#">Bộ sưu tập</a></li>
+                </ol>
+            </nav>
+        </div>
     </div>
 
-    
-        <div class="row text-center">	
-            <!-- Mỗi sản phẩm là một cột -->
-            <div class="col-6 col-md-4 col-lg-3 mb-4">
-
-                <a href="${pageContext.request.contextPath}/chitietsanpham/ban.jsp" class="text-decoration-none text-dark">
-                    <img src="../assets/img/ban.png" class="img-fluid w-50 mx-auto d-block mb-2" alt="Bàn">
-                    <div>Bàn</div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-lg-3 mb-4">
-
-                <a href="${pageContext.request.contextPath}/chitietsanpham/ghe.jsp" class="text-decoration-none text-dark">
-                    <img src="../assets/img/ghe.png" class="img-fluid w-50 mx-auto d-block mb-2" alt="Bàn">
-                    <div>Ghế</div>
-                </a>
-            </div>
-
-           
-            <div class="col-6 col-md-4 col-lg-3 mb-4">
-
-                <a href="${pageContext.request.contextPath}/chitietsanpham/tuvake.jsp" class="text-decoration-none text-dark">
-                    <img src="../assets/img/ke.png" class="img-fluid w-50 mx-auto d-block mb-2" alt="Tủ và Kệ">
-                    <div>Tủ và Kệ</div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-lg-3 mb-4">
-
-                <a href="${pageContext.request.contextPath}/chitietsanpham/den.jsp" class="text-decoration-none text-dark">
-                    <img src="../assets/img/den.png" class="img-fluid w-50 mx-auto d-block mb-2" alt="den">
-                    <div>den</div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-lg-3 mb-4">
-
-                <a href="${pageContext.request.contextPath}/chitietsanpham/giuong.jsp" class="text-decoration-none text-dark">
-                    <img src="../assets/img/giuong.png" class="img-fluid w-50 mx-auto d-block mb-2" alt="Giường">
-                    <div>Giường</div>
-                </a>
-            </div>
-           <div class="col-6 col-md-4 col-lg-3 mb-4">
-
-                <a href="${pageContext.request.contextPath}/chitietsanpham/phukien.jsp" class="text-decoration-none text-dark">
-                    <img src="../assets/img/phukien.webp" class="img-fluid w-50 mx-auto d-block mb-2" alt="Phụ kiện">
-                    <div>Phụ kiện</div>
-                </a>
-            </div>
-            <div class="col-6 col-md-4 col-lg-3 mb-4">
-
-                <a href="${pageContext.request.contextPath}/chitietsanpham/khuvuc.jsp" class="text-decoration-none text-dark">
-                    <img src="../assets/img/khuvuc.webp" class="img-fluid w-50 mx-auto d-block mb-2" alt="khu vực">
-                    <div>khu vực</div>
-                </a>
-            </div>
-           <div class="col-6 col-md-4 col-lg-3 mb-4">
-
-                <a href="${pageContext.request.contextPath}/chitietsanpham/combo.jsp" class="text-decoration-none text-dark">
-                    <img src="../assets/img/combo.png" class="img-fluid w-50 mx-auto d-block mb-2" alt="Combo">
-                    <div>Combo</div>
-                </a>
-            </div>
+    <!-- Danh sách danh mục -->
+    <div class="container mt-5">
+        <div class="row text-center">
+            <c:forEach var="dm" items="${danhMucList}">
+                <div class="col-6 col-md-4 col-lg-3 mb-4">
+                    <a href="${pageContext.request.contextPath}/sanpham-theo-danh-muc?ma_danh_muc=${dm.maDanhMuc}" class="text-decoration-none text-dark">
+                        <img src="${dm.urlAnh}" class="img-fluid w-50 mx-auto d-block mb-2" alt="${dm.ten}">
+                        <div>${dm.ten}</div>
+                    </a>
+                </div>
+            </c:forEach>
         </div>
     </div>
 
@@ -138,8 +80,5 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
-
 </body>
 </html>
