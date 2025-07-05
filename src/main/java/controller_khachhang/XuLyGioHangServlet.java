@@ -25,41 +25,46 @@ public class XuLyGioHangServlet extends HttpServlet {
         Integer maNguoiDung = (Integer) session.getAttribute("userId");
 
         if (maNguoiDung == null) {
-            // Nếu chưa đăng nhập thì chuyển về trang giỏ hàng
             response.sendRedirect("GioHangServlet");
             return;
         }
 
-        if ("mua".equals(action)) {
-            if (selectedIds == null || selectedIds.length == 0) {
-                session.setAttribute("message", "Vui lòng chọn ít nhất một sản phẩm để mua.");
-                response.sendRedirect("GioHangServlet");
-                return;
-            }
+        if (selectedIds == null || selectedIds.length == 0) {
+            session.setAttribute("message", "Vui lòng chọn ít nhất một sản phẩm.");
+            response.sendRedirect("GioHangServlet");
+            return;
+        }
 
-            List<GioHang> gioHangList = gioHangDAO.getByNguoiDung(maNguoiDung);
-            List<GioHang> gioHangMua = new ArrayList<>();
+        // Lấy toàn bộ giỏ hàng của người dùng
+        List<GioHang> gioHangList = gioHangDAO.getByNguoiDung(maNguoiDung);
+        List<GioHang> gioHangDaChon = new ArrayList<>();
 
-            for (String idStr : selectedIds) {
-                try {
-                    int maSP = Integer.parseInt(idStr);
-                    for (GioHang item : gioHangList) {
-                        if (item.getMaSanPham() == maSP) {
-                            SanPham sp = sanPhamDAO.getById(maSP);
-                            item.setSanPham(sp);
-                            gioHangMua.add(item);
-                            break;
-                        }
+        // Lọc ra những sản phẩm được chọn
+        for (String idStr : selectedIds) {
+            try {
+                int maSP = Integer.parseInt(idStr);
+                for (GioHang item : gioHangList) {
+                    if (item.getMaSanPham() == maSP) {
+                        SanPham sp = sanPhamDAO.getById(maSP);
+                        item.setSanPham(sp); // Đính kèm thông tin sản phẩm
+                        gioHangDaChon.add(item);
+                        break;
                     }
-                } catch (NumberFormatException e) {
-                    e.printStackTrace(); // Tránh dừng cả Servlet nếu 1 id lỗi
                 }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
             }
+        }
 
-            session.setAttribute("gioHangMua", gioHangMua);
+        if ("mua".equals(action)) {
+            session.setAttribute("gioHangMua", gioHangDaChon);
             response.sendRedirect("nguoidung/thanhtoanmua.jsp");
+        } else if ("thue".equals(action)) {
+            session.setAttribute("gioHangThue", gioHangDaChon);
+            response.sendRedirect("nguoidung/thanhtoanthue.jsp");
         } else {
-            // Hành động khác không hỗ trợ
+            // Nếu action không hợp lệ
+            session.setAttribute("message", "Hành động không hợp lệ.");
             response.sendRedirect("GioHangServlet");
         }
     }

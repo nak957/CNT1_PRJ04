@@ -1,4 +1,4 @@
-package controller;
+package controller_khachhang;
 
 import dao.GioHangDAO;
 import dao.SanPhamDAO;

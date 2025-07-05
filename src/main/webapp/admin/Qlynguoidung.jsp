@@ -6,7 +6,7 @@
     List<NguoiDung> listNguoiDung = (List<NguoiDung>) request.getAttribute("listNguoiDung");
     if (listNguoiDung == null) {
         NguoiDungDAO dao = new NguoiDungDAO();
-        listNguoiDung = dao.getAllUsers("khachhang");
+        listNguoiDung = dao.getAllUsers("khach_hang");
     }
 %>
 <!DOCTYPE html>
@@ -17,7 +17,7 @@
 </head>
 <body class="container mt-4">
 
-<h2 class="mb-4">Quản lý người dùng (khách hàng)</h2>
+<h2 class="mb-4">Quản lý khách hàng</h2>
 
 <!-- Form Thêm Người Dùng -->
 <form action="${pageContext.request.contextPath}/NguoiDungServlet" method="post" class="mb-4">

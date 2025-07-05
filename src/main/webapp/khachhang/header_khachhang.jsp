@@ -40,10 +40,11 @@
 		    <% } %>
 		
 		    <!-- Giỏ hàng -->
-		    <a id="cartButton" href="${pageContext.request.contextPath}/nguoidung/Giohang.jsp" class="btn btn-outline-primary btn-sm position-relative me-2">
-		        <i class="fa-solid fa-shopping-cart"></i>
-		        <span id="cartCount" class="badge badge-warning position-absolute" style="top: -6px; right: -10px;">0</span>
-		    </a>
+		   <a id="cartButton" href="${pageContext.request.contextPath}/GioHangServlet" class="btn btn-outline-primary btn-sm position-relative me-2">
+			    <i class="fa-solid fa-shopping-cart"></i>
+			    <span id="cartCount" class="badge badge-warning position-absolute" style="top: -6px; right: -10px;">0</span>
+			</a>
+
 		
 		    <!-- Vị trí -->
 		    <button class="btn btn-outline-secondary btn-sm me-2">

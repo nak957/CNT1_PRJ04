@@ -17,7 +17,7 @@
 <div class="container mt-5">
     <h4 class="mb-4">Xác nhận đơn hàng</h4>
 
-    <form action="${pageContext.request.contextPath}/XuLyThanhToanMuaServlet" method="post">
+    <form id="paymentForm" action="${pageContext.request.contextPath}/XuLyThanhToanMuaServlet" method="post">
         <div class="row">
             <!-- Giỏ hàng -->
             <div class="col-md-8">
@@ -42,20 +42,26 @@
                 <div class="card p-3 mb-3">
                     <h5>Thông tin giao hàng</h5>
                     <div class="form-group">
-                        <label>Địa điểm</label>
-                        <input type="text" class="form-control" value="Home" readonly>
+                        <label for="diaDiem">Địa điểm</label>
+                        <input type="text" class="form-control" id="diaDiem" name="diaDiem" placeholder="Nhập địa điểm" required>
                     </div>
                     <div class="form-group">
-                        <label>Quốc gia</label>
+                        <label>Thông tin địa chỉ</label>
                         <div class="row">
-                            <div class="col-md-4"><input type="text" class="form-control" value="Vietnam" readonly></div>
-                            <div class="col-md-4"><input type="text" class="form-control" value="Hồ Chí Minh" readonly></div>
-                            <div class="col-md-4"><input type="text" class="form-control" value="-" readonly></div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" id="quocGia" name="quocGia" placeholder="Nhập quốc gia" required>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" id="thanhPho" name="thanhPho" placeholder="Nhập thành phố" required>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" id="maBuuDien" name="maBuuDien" placeholder="Nhập mã bưu điện">
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Ghi chú</label>
-                        <textarea class="form-control" rows="2" placeholder="Ghi chú thêm (nếu có)"></textarea>
+                        <label for="ghiChu">Ghi chú</label>
+                        <textarea class="form-control" id="ghiChu" name="ghiChu" rows="2" placeholder="Ghi chú thêm (nếu có)"></textarea>
                     </div>
                 </div>
 
@@ -112,7 +118,7 @@
                     </div>
                     <div class="form-check mb-2">
                         <input class="form-check-input" type="radio" name="phuongThuc" id="cod" value="COD">
-                        <label class="form-check-label" for="cod">Thanh toán khi nhận hàng</label>
+                        <label class="form-check-label" for="cod">Trả tiền mặt</label>
                     </div>
 
                     <button type="submit" class="btn btn-dark btn-block mt-3">Xác nhận mua</button>
@@ -120,10 +126,55 @@
             </div>
         </div>
     </form>
+
+    <!-- Modal thông báo -->
+    <div class="modal fade" id="thanhToanModal" tabindex="-1" role="dialog" aria-labelledby="thanhToanModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="thanhToanModalLabel">Thông báo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="modalMessage">Xác nhận thanh toán thành công!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Script -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#paymentForm').on('submit', function(e) {
+            e.preventDefault(); // Ngăn form submit làm tải lại trang
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    // Hiển thị modal khi thanh toán thành công
+                    $('#modalMessage').text('Xác nhận thanh toán thành công!');
+                    $('#thanhToanModal').modal('show');
+                    // Có thể xóa giỏ hàng sau khi thanh toán thành công
+                    // sessionStorage.removeItem('gioHangMua');
+                },
+                error: function(xhr, status, error) {
+                    // Xử lý lỗi nếu có
+                    $('#modalMessage').text('Có lỗi xảy ra khi thanh toán. Vui lòng thử lại.');
+                    $('#thanhToanModal').modal('show');
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>

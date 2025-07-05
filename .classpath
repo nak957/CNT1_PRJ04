@@ -25,5 +25,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/thequ/Downloads/mysql-connector-j-9.2.0/mysql-connector-j-9.2.0/jakarta.servlet-api_6.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/thequ/Downloads/mysql-connector-j-9.2.0/mysql-connector-j-9.2.0/gson-2.8.9.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

@@ -37,7 +37,7 @@
             <c:forEach var="item" items="${gioHangList}">
                 <div class="list-group-item d-flex align-items-center">
                     <!-- Checkbox chọn -->
-                    <input type="checkbox" form="formMua" name="chonSanPham" value="${item.maSanPham}" class="form-check-input me-3"/>
+                    <input type="checkbox" name="chonSanPham" value="${item.maSanPham}" class="form-check-input me-3"/>
 
                     <!-- Ảnh -->
                     <img src="${pageContext.request.contextPath}/${item.sanPham.urlAnh}" alt="Ảnh"
@@ -48,6 +48,9 @@
                         <h6 class="mb-1">${item.sanPham.ten}</h6>
                         <p class="mb-1">
                             Giá thuê: <fmt:formatNumber value="${item.sanPham.giaThue}" type="currency" currencySymbol="đ"/>
+                        </p>
+                        <p class="mb-1">
+                            Giá mua: <fmt:formatNumber value="${item.sanPham.giaBan}" type="currency" currencySymbol="đ"/>
                         </p>
 
                         <!-- Form cập nhật số lượng -->
@@ -85,10 +88,8 @@
                 <c:choose>
                     <c:when test="${not empty sessionScope.userId}">
                         <!-- Form thuê -->
-                        <form action="${pageContext.request.contextPath}/XuLyThueServlet" method="post" class="d-inline">
-                            <c:forEach var="item" items="${gioHangList}">
-                                <input type="checkbox" name="chonSanPham" value="${item.maSanPham}" checked hidden/>
-                            </c:forEach>
+                        <form id="formThue" action="${pageContext.request.contextPath}/XuLyGioHangServlet" method="post" class="d-inline">
+                            <input type="hidden" name="action" value="thue"/>
                             <button type="submit" class="btn btn-primary">Thuê</button>
                         </form>
 
@@ -106,6 +107,37 @@
         </div>
     </c:if>
 </div>
+
+<!-- Script xử lý chọn sản phẩm -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const btnThue = document.querySelector("#formThue button");
+        const btnMua = document.querySelector("#formMua button");
+
+        btnThue.addEventListener("click", function (e) {
+            const form = document.getElementById("formThue");
+            copyCheckedCheckboxesToForm(form);
+        });
+
+        btnMua.addEventListener("click", function (e) {
+            const form = document.getElementById("formMua");
+            copyCheckedCheckboxesToForm(form);
+        });
+
+        function copyCheckedCheckboxesToForm(form) {
+            // Xoá các checkbox cũ
+            form.querySelectorAll("input[name='chonSanPham']").forEach(e => e.remove());
+
+            // Lấy checkbox đã chọn
+            const checked = document.querySelectorAll("input[name='chonSanPham']:checked");
+            checked.forEach(cb => {
+                const clone = cb.cloneNode(true);
+                clone.type = "hidden";
+                form.appendChild(clone);
+            });
+        }
+    });
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
