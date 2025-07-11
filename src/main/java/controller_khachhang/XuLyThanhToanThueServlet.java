@@ -82,7 +82,7 @@ public class XuLyThanhToanThueServlet extends HttpServlet {
         for (GioHang item : gioHangThue) {
             ChiTietHopDongThue ct = new ChiTietHopDongThue();
             ct.setMaHopDong(maHopDong);
-            ct.setMaSanPham(item.getMaSanPham());
+            ct.setMaSanPham(item.getSanPham().getMaSanPham());
             ct.setSoLuong(item.getSoLuong());
             ct.setDonGiaThue(item.getSanPham().getGiaThue());
             chiTietDAO.insert(ct);

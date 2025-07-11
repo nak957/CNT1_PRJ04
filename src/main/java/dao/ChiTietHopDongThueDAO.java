@@ -16,18 +16,18 @@ public class ChiTietHopDongThueDAO {
      * Thêm mới một chi tiết thuê vào CSDL
      */
     public boolean insert(ChiTietHopDongThue ct) {
-        String sql = "INSERT INTO ChiTietHopDongThue (ma_don_hang, ma_hop_dong, ma_san_pham, so_luong, don_gia_thue, thanh_tien) " +
-                     "VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO ChiTietHopDongThue ( ma_hop_dong, ma_san_pham, so_luong, don_gia_thue, thanh_tien) " +
+                     "VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, ct.getMaDonHang());
-            stmt.setInt(2, ct.getMaHopDong());
-            stmt.setInt(3, ct.getMaSanPham());
-            stmt.setInt(4, ct.getSoLuong());
-            stmt.setBigDecimal(5, ct.getDonGiaThue());
-            stmt.setBigDecimal(6, ct.getThanhTien());
+         
+            stmt.setInt(1, ct.getMaHopDong());
+            stmt.setInt(2, ct.getMaSanPham());
+            stmt.setInt(3, ct.getSoLuong());
+            stmt.setBigDecimal(4, ct.getDonGiaThue());
+            stmt.setBigDecimal(5, ct.getThanhTien());
 
             return stmt.executeUpdate() > 0;
 
@@ -65,7 +65,7 @@ public class ChiTietHopDongThueDAO {
     private ChiTietHopDongThue mapRow(ResultSet rs) throws SQLException {
         ChiTietHopDongThue ct = new ChiTietHopDongThue();
         ct.setMaCtThue(rs.getInt("ma_ct_thue"));
-        ct.setMaDonHang(rs.getInt("ma_don_hang"));
+        
         ct.setMaHopDong(rs.getInt("ma_hop_dong"));
         ct.setMaSanPham(rs.getInt("ma_san_pham"));
         ct.setSoLuong(rs.getInt("so_luong"));

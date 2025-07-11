@@ -130,7 +130,7 @@
                             <input type="radio" name="phuongThuc" value="ChuyenKhoan" checked> Chuyển khoản
                         </label>
                         <label class="btn btn-light btn-lg btn-block border border-dark">
-                            <input type="radio" name="phuongThuc" value="ThanhToanKhiNhanHang"> Thanh toán khi nhận hàng
+                            <input type="radio" name="phuongThuc" value="TienMat"> Trả Tiền mặt
                         </label>
                     </div>
                     <button type="submit" class="btn btn-dark btn-lg btn-block mt-4">Xác nhận thuê</button>

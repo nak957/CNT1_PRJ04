@@ -12,7 +12,7 @@
 <body class="bg-light">
 
 <!-- Header -->
-<jsp:include page="../header.jsp"/>
+<jsp:include page="../khachhang/header_khachhang.jsp" />
 
 <div class="container mt-5">
     <h4 class="mb-4">Xác nhận đơn hàng</h4>

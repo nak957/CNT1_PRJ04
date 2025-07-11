@@ -44,16 +44,12 @@
         <li class="nav-item"><a href="#" class="nav-link text-dark" data-content="${pageContext.request.contextPath}/admin/Qlynguoidung.jsp"><i class="fas fa-users me-2" ></i>Người dùng</a></li>
         <li class="nav-item"><a href="#" class="nav-link text-dark" data-content="${pageContext.request.contextPath}/admin/Qlysanpham.jsp"><i class="fas fa-box me-2"></i>Sản phẩm</a></li>
         <li class="nav-item"><a href="#" class="nav-link text-dark" data-content="${pageContext.request.contextPath}/admin/Qlydanhmuc.jsp"><i class="fas fa-list me-2"></i>Danh mục</a></li>
-        <li class="nav-item"><a href="#" class="nav-link text-dark" data-content="${pageContext.request.contextPath}/admin/Qlygiohang.jsp"><i class="fas fa-shopping-cart me-2"></i>Giỏ hàng</a></li>
         <li class="nav-item"><a href="#" class="nav-link text-dark" data-content="${pageContext.request.contextPath}/admin/Qlydonhang.jsp"><i class="fas fa-truck me-2"></i>Đơn hàng</a></li>
         <li class="nav-item"><a href="#" class="nav-link text-dark" data-content="${pageContext.request.contextPath}/admin/Qlyhopdongthue.jsp"><i class="fas fa-file-contract me-2"></i>Hợp đồng thuê</a></li>
         <li class="nav-item"><a href="#" class="nav-link text-dark" data-content="${pageContext.request.contextPath}/admin/Qlythanhtoanmua.jsp"><i class="fas fa-credit-card me-2"></i>Thanh toán mua</a></li>
-        <li class="nav-item"><a href="#" class="nav-link text-dark" data-content="${pageContext.request.contextPath}/admin/Qlythanhtoanthue.jsp"><i class="fas fa-credit-card me-2"></i>Thanh toán thuê</a></li>
         <li class="nav-item"><a href="#" class="nav-link text-dark" data-content="${pageContext.request.contextPath}/admin/Qlynhanvien.jsp"><i class="fas fa-user-tie me-2"></i>Nhân viên</a></li>
 
-        <li class="nav-item"><a href="#" class="nav-link text-dark" data-content="${pageContext.request.contextPath}/admin/Qlychitietdonhang.jsp"><i class="fas fa-file-alt me-2"></i>Chi tiết đơn hàng</a></li>
-        <li class="nav-item"><a href="#" class="nav-link text-dark" data-content="${pageContext.request.contextPath}/admin/Qlychitiethopdongthue.jsp"><i class="fas fa-file-alt me-2"></i>Chi tiết hợp đồng thuê </a></li>
-     
+        
      
       </ul>
     </div>

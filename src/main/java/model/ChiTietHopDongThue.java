@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public class ChiTietHopDongThue {
     private int maCtThue;
-    private int maDonHang;
+    
     private int maHopDong;
     private int maSanPham;
     private int soLuong;
@@ -16,10 +16,10 @@ public class ChiTietHopDongThue {
     }
 
     // Constructor đầy đủ tham số
-    public ChiTietHopDongThue(int maCtThue, int maDonHang, int maHopDong, int maSanPham,
+    public ChiTietHopDongThue(int maCtThue,  int maHopDong, int maSanPham,
                                int soLuong, BigDecimal donGiaThue, BigDecimal thanhTien) {
         this.maCtThue = maCtThue;
-        this.maDonHang = maDonHang;
+       
         this.maHopDong = maHopDong;
         this.maSanPham = maSanPham;
         this.soLuong = soLuong;
@@ -37,13 +37,7 @@ public class ChiTietHopDongThue {
         this.maCtThue = maCtThue;
     }
 
-    public int getMaDonHang() {
-        return maDonHang;
-    }
-
-    public void setMaDonHang(int maDonHang) {
-        this.maDonHang = maDonHang;
-    }
+    
 
     public int getMaHopDong() {
         return maHopDong;

@@ -70,7 +70,7 @@ public class NguoiDungDAO {
     // Lấy danh sách tất cả người dùng có vai trò khách hàng
     public List<NguoiDung> getAllUsers(String string) {
         List<NguoiDung> list = new ArrayList<>();
-        String sql = "SELECT * FROM nguoidung WHERE vai_tro = 'khach_hang'";
+        String sql = "SELECT * FROM nguoidung WHERE vai_tro = 'khachhang'";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {

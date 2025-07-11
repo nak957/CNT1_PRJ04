@@ -9,10 +9,7 @@ import java.util.List;
 
 public class HopDongThueDAO {
 
-    /**
-     * Chức năng: Thêm mới hợp đồng thuê vào CSDL
-     * Trả về: mã hợp đồng (auto-increment) nếu thêm thành công, -1 nếu lỗi
-     */
+    // Thêm hợp đồng thuê
     public int insert(HopDongThue hopDong) {
         String sql = "INSERT INTO HopDongThue (ma_nguoi_dung, loai_hop_dong, ngay_bat_dau, ngay_ket_thuc, thoi_gian_thue, " +
                 "tong_phi, tien_coc, trang_thai, ngay_tao, ngay_cap_nhat, ngay_tra_thuc_te, phi_phat, ghi_chu) " +
@@ -34,16 +31,11 @@ public class HopDongThueDAO {
             stmt.setString(11, hopDong.getGhiChu());
 
             int affectedRows = stmt.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("Thêm hợp đồng thuê thất bại, không có dòng nào bị ảnh hưởng.");
-            }
+            if (affectedRows == 0) throw new SQLException("Thêm hợp đồng thất bại.");
 
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    return generatedKeys.getInt(1);
-                } else {
-                    throw new SQLException("Thêm hợp đồng thuê thất bại, không lấy được ID.");
-                }
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) return rs.getInt(1);
+                else throw new SQLException("Không lấy được ID hợp đồng.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -51,9 +43,7 @@ public class HopDongThueDAO {
         return -1;
     }
 
-    /**
-     * Chức năng: Lấy toàn bộ danh sách hợp đồng thuê từ CSDL
-     */
+    // Lấy tất cả hợp đồng thuê
     public List<HopDongThue> findAll() {
         List<HopDongThue> list = new ArrayList<>();
         String sql = "SELECT * FROM HopDongThue";
@@ -62,19 +52,15 @@ public class HopDongThueDAO {
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
-            while (rs.next()) {
-                HopDongThue hdt = extractFromResultSet(rs);
-                list.add(hdt);
-            }
+            while (rs.next()) list.add(extractFromResultSet(rs));
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return list;
     }
 
-    /**
-     * Chức năng: Tìm hợp đồng thuê theo mã hợp đồng
-     */
+    // Tìm theo ID
     public HopDongThue findById(int maHopDong) {
         String sql = "SELECT * FROM HopDongThue WHERE ma_hop_dong = ?";
 
@@ -83,9 +69,7 @@ public class HopDongThueDAO {
 
             stmt.setInt(1, maHopDong);
             try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return extractFromResultSet(rs);
-                }
+                if (rs.next()) return extractFromResultSet(rs);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -93,9 +77,7 @@ public class HopDongThueDAO {
         return null;
     }
 
-    /**
-     * Chức năng: Cập nhật thông tin hợp đồng thuê
-     */
+    // Cập nhật hợp đồng thuê
     public boolean update(HopDongThue hopDong) {
         String sql = "UPDATE HopDongThue SET loai_hop_dong=?, ngay_bat_dau=?, ngay_ket_thuc=?, thoi_gian_thue=?, " +
                 "tong_phi=?, tien_coc=?, trang_thai=?, ngay_cap_nhat=NOW(), ngay_tra_thuc_te=?, phi_phat=?, ghi_chu=? " +
@@ -124,17 +106,40 @@ public class HopDongThueDAO {
         return false;
     }
 
-    /**
-     * Chức năng: Xóa hợp đồng thuê theo mã
-     */
     public boolean delete(int maHopDong) {
-        String sql = "DELETE FROM HopDongThue WHERE ma_hop_dong = ?";
+        String deleteThanhToan = "DELETE FROM ThanhToanThue WHERE ma_hop_dong = ?";
+        String deleteChiTiet = "DELETE FROM ChiTietHopDongThue WHERE ma_hop_dong = ?";
+        String deleteHopDong = "DELETE FROM HopDongThue WHERE ma_hop_dong = ?";
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection()) {
+            conn.setAutoCommit(false); // Bắt đầu transaction
 
-            stmt.setInt(1, maHopDong);
-            return stmt.executeUpdate() > 0;
+            try (
+                PreparedStatement stmt1 = conn.prepareStatement(deleteThanhToan);
+                PreparedStatement stmt2 = conn.prepareStatement(deleteChiTiet);
+                PreparedStatement stmt3 = conn.prepareStatement(deleteHopDong)
+            ) {
+                // 1. Xóa bảng ThanhToanThue
+                stmt1.setInt(1, maHopDong);
+                stmt1.executeUpdate();
+
+                // 2. Xóa bảng ChiTietHopDongThue
+                stmt2.setInt(1, maHopDong);
+                stmt2.executeUpdate();
+
+                // 3. Cuối cùng mới xóa HopDongThue
+                stmt3.setInt(1, maHopDong);
+                int rows = stmt3.executeUpdate();
+
+                conn.commit(); // Thành công
+                return rows > 0;
+
+            } catch (SQLException e) {
+                conn.rollback(); // Thất bại thì rollback
+                e.printStackTrace();
+            } finally {
+                conn.setAutoCommit(true);
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -142,9 +147,8 @@ public class HopDongThueDAO {
         return false;
     }
 
-    /**
-     * Hàm hỗ trợ: Trích xuất dữ liệu từ ResultSet thành đối tượng HopDongThue
-     */
+
+    // Trích xuất từ ResultSet
     private HopDongThue extractFromResultSet(ResultSet rs) throws SQLException {
         HopDongThue hdt = new HopDongThue();
         hdt.setMaHopDong(rs.getInt("ma_hop_dong"));
@@ -162,5 +166,30 @@ public class HopDongThueDAO {
         hdt.setPhiPhat(rs.getBigDecimal("phi_phat"));
         hdt.setGhiChu(rs.getString("ghi_chu"));
         return hdt;
+    }
+
+    // Tìm kiếm theo tên người dùng và trạng thái
+    public List<HopDongThue> findByTenNguoiDungVaTrangThai(String tenNguoiDung, String trangThai) {
+        List<HopDongThue> list = new ArrayList<>();
+        String sql = "SELECT h.* FROM hopdongthue h " +
+                     "JOIN nguoidung n ON h.ma_nguoi_dung = n.ma_nguoi_dung " +
+                     "WHERE n.ho_ten LIKE ? AND h.trang_thai = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, "%" + tenNguoiDung + "%");
+            stmt.setString(2, trangThai);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                list.add(extractFromResultSet(rs));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
     }
 }

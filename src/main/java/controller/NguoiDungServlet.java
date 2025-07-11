@@ -44,7 +44,7 @@ public class NguoiDungServlet extends HttpServlet {
     }
 
     private void listUsers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<NguoiDung> listNguoiDung = nguoiDungDAO.getAllUsers("khach_hang");
+        List<NguoiDung> listNguoiDung = nguoiDungDAO.getAllUsers("khachhang");
         request.setAttribute("listNguoiDung", listNguoiDung);
         request.getRequestDispatcher("admin/Qlynguoidung.jsp").forward(request, response);
     }

@@ -1,26 +1,10 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ page import="java.util.*, java.text.SimpleDateFormat" %>
+<%@ page import="model.DonHangView" %>
+
 <%
-    class DonHang {
-        int ma;
-        double tongTien;
-        String trangThai;
-        Date ngayDat;
-
-        public DonHang(int ma, double tongTien, String trangThai, Date ngayDat) {
-            this.ma = ma;
-            this.tongTien = tongTien;
-            this.trangThai = trangThai;
-            this.ngayDat = ngayDat;
-        }
-    }
-
-    List<DonHang> danhSach = new ArrayList<>();
+    List<DonHangView> danhSach = (List<DonHangView>) request.getAttribute("danhSachDonHang");
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-
-    danhSach.add(new DonHang(1001, 1500000, "cho_xac_nhan", new Date()));
-    danhSach.add(new DonHang(1002, 2200000, "dang_giao", new Date()));
-    danhSach.add(new DonHang(1003, 900000, "da_huy", new Date()));
 %>
 
 <!DOCTYPE html>
@@ -34,8 +18,9 @@
 
 <div class="container mt-5">
     <div class="card border shadow-sm">
-        <div class="card-header bg-white">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
             <h4 class="mb-0">🧾 Đơn hàng của bạn</h4>
+            <span class="text-muted">Hiển thị cả đơn mua và đơn thuê</span>
         </div>
 
         <div class="card-body p-0">
@@ -43,7 +28,8 @@
                 <table class="table table-hover mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th>Mã đơn hàng</th>
+                            <th>Loại</th>
+                            <th>Mã giao dịch</th>
                             <th>Ngày đặt</th>
                             <th>Tổng tiền</th>
                             <th>Trạng thái</th>
@@ -51,25 +37,56 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <% for (DonHang dh : danhSach) { %>
+                    <%
+                        if (danhSach != null && !danhSach.isEmpty()) {
+                            for (DonHangView dh : danhSach) {
+                    %>
                         <tr>
-                            <td>#<%= dh.ma %></td>
-                            <td><%= sdf.format(dh.ngayDat) %></td>
-                            <td><%= String.format("%,.0f", dh.tongTien) %> VNĐ</td>
                             <td>
-                                <% if ("cho_xac_nhan".equals(dh.trangThai)) { %>
+                                <% if ("mua".equals(dh.getLoai())) { %>
+                                    <span class="badge badge-primary">Mua</span>
+                                <% } else if ("thue".equals(dh.getLoai())) { %>
+                                    <span class="badge badge-success">Thuê</span>
+                                <% } else { %>
+                                    <span class="badge badge-secondary">Khác</span>
+                                <% } %>
+                            </td>
+                            <td>#<%= dh.getMaGiaoDich() %></td>
+                            <td><%= sdf.format(dh.getNgayDat()) %></td>
+                            <td><%= String.format("%,.0f", dh.getTongTien()) %> VNĐ</td>
+                            <td>
+                                <% String tt = dh.getTrangThai(); %>
+                                <% if ("cho_xac_nhan".equals(tt)) { %>
                                     <span class="badge badge-warning">Chờ xác nhận</span>
-                                <% } else if ("dang_giao".equals(dh.trangThai)) { %>
+                                <% } else if ("dang_giao".equals(tt)) { %>
                                     <span class="badge badge-info">Đang giao</span>
-                                <% } else if ("da_huy".equals(dh.trangThai)) { %>
+                                <% } else if ("da_huy".equals(tt)) { %>
                                     <span class="badge badge-secondary">Đã huỷ</span>
-                                <% } else if ("hoan_thanh".equals(dh.trangThai)) { %>
+                                <% } else if ("hoan_thanh".equals(tt)) { %>
                                     <span class="badge badge-success">Hoàn thành</span>
+                                <% } else if ("cho_xu_ly".equals(tt)) { %>
+                                    <span class="badge badge-warning">Chờ xử lý</span>
                                 <% } else { %>
                                     <span class="badge badge-light">Không rõ</span>
                                 <% } %>
                             </td>
-                            <td><a href="chitietdonhang.jsp?id=<%= dh.ma %>" class="btn btn-sm btn-outline-primary">Xem</a></td>
+                            <td>
+                                <%-- Điều hướng đến trang chi tiết tùy loại --%>
+                                <% if ("mua".equals(dh.getLoai())) { %>
+                                    <a href="chitietdonmua.jsp?id=<%= dh.getMaGiaoDich() %>" class="btn btn-sm btn-outline-primary">Xem</a>
+                                <% } else if ("thue".equals(dh.getLoai())) { %>
+                                    <a href="chitiethopdong.jsp?id=<%= dh.getMaGiaoDich() %>" class="btn btn-sm btn-outline-success">Xem</a>
+                                <% } else { %>
+                                    <button class="btn btn-sm btn-secondary" disabled>Không rõ</button>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% 
+                            }
+                        } else { 
+                    %>
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">Không có đơn hàng nào.</td>
                         </tr>
                     <% } %>
                     </tbody>

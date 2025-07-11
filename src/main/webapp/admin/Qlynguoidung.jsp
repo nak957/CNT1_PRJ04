@@ -6,7 +6,7 @@
     List<NguoiDung> listNguoiDung = (List<NguoiDung>) request.getAttribute("listNguoiDung");
     if (listNguoiDung == null) {
         NguoiDungDAO dao = new NguoiDungDAO();
-        listNguoiDung = dao.getAllUsers("khach_hang");
+        listNguoiDung = dao.getAllUsers("khachhang");
     }
 %>
 <!DOCTYPE html>

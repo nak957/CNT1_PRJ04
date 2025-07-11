@@ -41,12 +41,14 @@
                         <i class="fas fa-user me-2"></i> Tài Khoản Của Tôi
                     </a>
                 </li>
-                <li class="mb-3">
-                    <a href="#" class="load-content text-decoration-none text-dark d-flex align-items-center"
-                       data-content="${pageContext.request.contextPath}/nguoidung/donhang.jsp">
-                        <i class="fas fa-box me-2"></i> Đơn hàng 
-                    </a>
-                </li>
+	            <li class="mb-3">
+				    <a href="#" class="load-content text-decoration-none text-dark d-flex align-items-center"
+				       data-content="${pageContext.request.contextPath}/nguoidung/donhang">
+				        <i class="fas fa-box me-2"></i> Đơn hàng
+				    </a>
+				</li>
+
+
                 <li class="mb-3 d-flex gap-2">
                     <a href="${pageContext.request.contextPath}/khachhang/suathongtin_khachhang.jsp" class="btn btn-warning btn-sm w-100">
                         <i class="fas fa-user-edit me-1"></i> Sửa thông tin
